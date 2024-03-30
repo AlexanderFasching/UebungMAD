@@ -9,6 +9,9 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,6 +61,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ModifierInfo
 import androidx.compose.ui.res.painterResource
@@ -69,6 +73,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.getMovies
+import com.example.movieappmad24.navigation.Navigation
+import com.example.movieappmad24.screens.HomeScreen
 import com.example.movieappmad24.ui.theme.MovieAppMAD24Theme
 import kotlinx.coroutines.delay
 
@@ -76,183 +82,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MovieAppMAD24Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    MovieAppScaffold(appName = getString(R.string.app_name))
-                }
-            }
+            Navigation(appName = getString(R.string.app_name))
         }
     }
 }
 
 
-@Composable
-fun MovieList(movies: List<Movie> = getMovies()){
-    LazyColumn {
-        items(movies) { movie ->
-            MovieRow(movie)
-        }
-    }
-}
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MovieRow(movie: Movie){
-    var showDetails by remember {
-        mutableStateOf(false)
-    }
-
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .animateContentSize(
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = LinearOutSlowInEasing
-            )
-        )
-        .padding(5.dp),
-        shape = ShapeDefaults.Large,
-        onClick = {
-            showDetails = !showDetails
-        },
-        elevation = CardDefaults.cardElevation(10.dp)
-    ) {
-        Column {
-            Box(
-                modifier = Modifier
-                    .height(150.dp)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                AsyncImage(
-                    model = movie.images[0],
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(10.dp),
-                    contentAlignment = Alignment.TopEnd
-                ){
-                    Icon(
-                        tint = MaterialTheme.colorScheme.secondary,
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Add to favorites")
-                }
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(6.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = movie.title,
-                    fontSize = 24.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Icon(modifier = Modifier
-                    .clickable {
-                        showDetails = !showDetails
-                    },
-                    imageVector =
-                    if (showDetails) Icons.Filled.KeyboardArrowDown
-                    else Icons.Default.KeyboardArrowUp, contentDescription = "show more")
-            }
-            if(showDetails) {
-                Column(
-                    Modifier.padding(horizontal = 10.dp)
-                ) {
-                    Text(text = movie.director)
-                    Text(text = movie.year)
-                    Text(text = movie.genre)
-                    Text(text = movie.actors)
-                    Text(text = movie.rating)
-                    Divider()
-                    Text(text = movie.plot)
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(appName: String){
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        title = {
-            Text(text = appName)
-        }
-    )
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MovieAppScaffold(appName: String) {
-    Scaffold(
-        topBar = { TopBar(appName) },
-        bottomBar = { BtmBar() }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-
-        ) {
-            MovieList(movies = getMovies())
-        }
-    }
-}
-@Composable
-fun BtmBar() {
-    BottomAppBar(
-        actions = {
-            NavigationBarItem(
-                selected = true,
-                onClick = { /*TODO*/ },
-                icon = {
-                    Icon(
-                        Icons.Filled.Home,
-                        contentDescription = "Home button"
-                    )
-                },
-                label = {
-                    Text(text = "Home")
-                }
-            )
-            NavigationBarItem(
-                selected = false,
-                onClick = { /*TODO*/ },
-                icon = {
-                    Icon(
-                        Icons.Filled.Star,
-                        contentDescription = "Watchlist"
-                    )
-                },
-                label = {
-                    Text(text = "Watchlist")
-                }
-            )
-        }
-    )
-}
 
 @Preview
 @Composable
 fun DefaultPreview(){
     MovieAppMAD24Theme {
-        MovieList(movies = getMovies())
+
     }
 }

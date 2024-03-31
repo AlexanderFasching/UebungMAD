@@ -12,15 +12,15 @@ import com.example.movieappmad24.screens.HomeScreen
 @Composable
 fun Navigation(appName: String) {
     val navController = rememberNavController()
-    
-    NavHost(navController = navController, startDestination = "homescreen") {
-        composable(route = "homescreen") {
+
+    NavHost(navController = navController, startDestination = Screen.Home.route) {
+        composable(route = Screen.Home.route) {
             HomeScreen(navController = navController, appName)
         }
-        composable(route = "detailscreen/{movieId}",
+        composable(route = Screen.Details.route,
             arguments = listOf(navArgument(name = "movieId") {type = NavType.StringType})
         ) {backStackEntry ->
-            DetailScreen(movieId = backStackEntry.arguments?.getString("movieId"))
+            DetailScreen(navController = navController, movieId = backStackEntry.arguments?.getString("movieId"))
         }
     }
 }

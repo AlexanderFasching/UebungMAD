@@ -10,14 +10,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.movieappmad24.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleTopAppBar(navController: NavController, title: String) {
+fun SimpleTopAppBar(navController: NavController, title: String, back: Boolean) {
+
     CenterAlignedTopAppBar(
         title = { Text(text = title) },
         navigationIcon = {
-            if(navController.previousBackStackEntry != null) {
+            if(back) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,

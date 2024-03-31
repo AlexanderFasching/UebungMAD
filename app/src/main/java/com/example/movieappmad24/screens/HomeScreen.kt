@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.R
+import com.example.movieappmad24.composables.MovieList
 import com.example.movieappmad24.composables.MovieRow
 import com.example.movieappmad24.composables.SimpleBottomAppBar
 import com.example.movieappmad24.composables.SimpleTopAppBar
@@ -60,24 +61,12 @@ fun HomeScreen(navController: NavController, appName: String) {
     MovieAppScaffold(navController, appName)
 }
 
-@Composable
-fun MovieList(navController: NavController, movies: List<Movie> = getMovies()){
-    LazyColumn(
-    ) {
-        items(movies) { movie ->
-            MovieRow(movie) {
-                navController.navigate(Screen.Details.createRoute(movie.id))
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieAppScaffold(navController: NavController, appName: String) {
     Scaffold(
-        topBar = { SimpleTopAppBar(navController = navController, title = appName) },
-        bottomBar = { SimpleBottomAppBar() }
+        topBar = { SimpleTopAppBar(navController = navController, title = appName, back = false) },
+        bottomBar = { SimpleBottomAppBar(navController = navController) }
     ) { innerPadding ->
         Box(
             modifier = Modifier

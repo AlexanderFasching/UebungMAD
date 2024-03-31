@@ -30,8 +30,8 @@ fun DetailScreen(navController: NavController, movieId: String?) {
 @Composable
 fun DetailScreenScaffold(navController: NavController, movie: Movie?) {
     Scaffold(
-        topBar = { SimpleTopAppBar(navController = navController, title = "Details") },
-        bottomBar = { SimpleBottomAppBar() }
+        topBar = { SimpleTopAppBar(navController = navController, title = "Details", back = true) },
+        bottomBar = { SimpleBottomAppBar(navController = navController) }
     ) { innerPadding ->
         Box(
             modifier = Modifier

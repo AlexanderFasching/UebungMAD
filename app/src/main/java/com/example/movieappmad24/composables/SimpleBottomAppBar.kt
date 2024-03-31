@@ -8,14 +8,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.movieappmad24.navigation.Screen
 
 @Composable
-fun SimpleBottomAppBar() {
+fun SimpleBottomAppBar(navController: NavController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     BottomAppBar(
         actions = {
             NavigationBarItem(
-                selected = true,
-                onClick = { /*TODO*/ },
+                selected = currentRoute == Screen.Home.route,
+                onClick = {
+                          navController.navigate(Screen.Home.route) {
+
+                              launchSingleTop = true
+                          }
+                },
                 icon = {
                     Icon(
                         Icons.Filled.Home,
@@ -27,8 +38,12 @@ fun SimpleBottomAppBar() {
                 }
             )
             NavigationBarItem(
-                selected = false,
-                onClick = { /*TODO*/ },
+                selected = currentRoute == Screen.Watchlist.route,
+                onClick = {
+                    navController.navigate(Screen.Watchlist.route) {
+                        launchSingleTop = true
+                    }
+                },
                 icon = {
                     Icon(
                         Icons.Filled.Star,

@@ -5,4 +5,5 @@ sealed class Screen(val route: String) {
     object Details : Screen("detailscreen/{movieId}") {
         fun createRoute(movieId: String) = "detailscreen/$movieId"
     }
+    object Watchlist : Screen("watchlist")
 }

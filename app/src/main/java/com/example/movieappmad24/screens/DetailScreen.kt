@@ -16,19 +16,20 @@ import com.example.movieappmad24.composables.MovieRow
 import com.example.movieappmad24.composables.SimpleBottomAppBar
 import com.example.movieappmad24.composables.SimpleTopAppBar
 import com.example.movieappmad24.models.Movie
+import com.example.movieappmad24.models.MoviesViewModel
 import com.example.movieappmad24.models.getMovies
 
 @Composable
-fun DetailScreen(navController: NavController, movieId: String?) {
-    val movie = getMovies().find { it.id == movieId }
+fun DetailScreen(navController: NavController, moviesViewModel: MoviesViewModel, movieId: String?) {
+    val movie = moviesViewModel.movieList.find { it.id == movieId }
     if (movie != null) {
         Text(text = movie.id.toString())
     }
-    DetailScreenScaffold(navController = navController, movie = movie)
+    DetailScreenScaffold(navController = navController, moviesViewModel= moviesViewModel, movie = movie)
 }
 
 @Composable
-fun DetailScreenScaffold(navController: NavController, movie: Movie?) {
+fun DetailScreenScaffold(navController: NavController, moviesViewModel: MoviesViewModel, movie: Movie?) {
     Scaffold(
         topBar = { SimpleTopAppBar(navController = navController, title = "Details", back = true) },
         bottomBar = { SimpleBottomAppBar(navController = navController) }
@@ -40,7 +41,7 @@ fun DetailScreenScaffold(navController: NavController, movie: Movie?) {
 
         ) {
             Column {
-                MovieRow(movie = movie)
+                MovieRow(movie = movie, onFavClick = { movieId -> moviesViewModel.toggleFavoriteMovie(movieId) })
                 ImageLazyRow(movie = movie)
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -31,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,7 +43,8 @@ import com.example.movieappmad24.models.Movie
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieRow(movie: Movie?,
-             onItemClick: (String) -> Unit = {}
+             onItemClick: (String) -> Unit = {},
+             onFavClick: (String) -> Unit = {}
 ){
     var showDetails by remember {
         mutableStateOf(false)
@@ -78,9 +81,19 @@ fun MovieRow(movie: Movie?,
                         .padding(10.dp),
                     contentAlignment = Alignment.TopEnd
                 ){
+                    var icon : ImageVector
+                    icon = if(movie?.isFavorite == true) {
+                        Icons.Default.Favorite
+                    } else {
+                        Icons.Default.FavoriteBorder
+                    }
                     Icon(
+                        modifier = Modifier
+                            .clickable {
+                                       onFavClick(movie?.id.toString())
+                            },
                         tint = MaterialTheme.colorScheme.secondary,
-                        imageVector = Icons.Default.FavoriteBorder,
+                        imageVector = icon,
                         contentDescription = "Add to favorites")
                 }
             }

@@ -45,6 +45,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.R
@@ -53,17 +54,12 @@ import com.example.movieappmad24.composables.MovieRow
 import com.example.movieappmad24.composables.SimpleBottomAppBar
 import com.example.movieappmad24.composables.SimpleTopAppBar
 import com.example.movieappmad24.models.Movie
+import com.example.movieappmad24.models.MoviesViewModel
 import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.navigation.Screen
 
 @Composable
-fun HomeScreen(navController: NavController, appName: String) {
-    MovieAppScaffold(navController, appName)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MovieAppScaffold(navController: NavController, appName: String) {
+fun HomeScreen(navController: NavController, moviesViewModel: MoviesViewModel, appName: String) {
     Scaffold(
         topBar = { SimpleTopAppBar(navController = navController, title = appName, back = false) },
         bottomBar = { SimpleBottomAppBar(navController = navController) }
@@ -74,7 +70,8 @@ fun MovieAppScaffold(navController: NavController, appName: String) {
                 .fillMaxSize()
 
         ) {
-            MovieList(navController = navController, movies = getMovies())
+            MovieList(navController = navController, moviesViewModel = moviesViewModel, movies = moviesViewModel.movieList)
         }
     }
 }
+
